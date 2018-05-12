@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="GerenciadorUsuarios">
+	<head>
+		<meta charset="UTF-8">
+		<title>Projeto Engenharia de Software</title>
+		<link rel="stylesheet" href="public/css/boots/bootstrap.min.css">
+		<link rel="stylesheet" href="public/css/boots/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="public/css/boots/bootstrap-select.min.css">
+		<link rel="stylesheet" href="public/css/main.css">
+		<link rel="stylesheet" href="public/css/jquery-ui.min.css">
+		<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+		<script src="public/js/angular/angular.min.js"></script>
+		<script src="public/js/angular/angular-route.min.js"></script>
+		<script src="public/js/main.js"></script>
+		<script src="public/js/controllers/usuario-controller.js"></script>
+		<script src="public/js/controllers/listaUsuarios-controller.js"></script>
+		<script src="public/js/controllers/cargo-controller.js"></script>
+		<script src="public/js/controllers/listaCargos-controller.js"></script>
+		<script src="public/js/services/cargoService.js"></script>
+		<script src="public/js/services/usuarioService.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<nav>
+					<ul class="nav nav-pills">
+						<li role="presentation"><a href="#/">Home</a></li>
+						<li class="dropdown" role="presentation">
+							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								Usuários <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li role="presentation"><a href="#/usuario/new">Adicionar Usuário</a></li>
+								<li role="presentation"><a href="#/usuarios">Listar Usuários</a></li>
+							</ul>
+						</li>
+
+						<li class="dropdown" role="presentation">
+							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								Cargos <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li role="presentation"><a href="#/cargo/new">Adicionar Cargo</a></li>
+								<li role="presentation"><a href="#/cargos">Listar Cargos</a></li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+			</header>
+
+			<ng-view></ng-view>
+
+			<div class="row">
+				<footer>
+					<!--
+					<h5 class="text-center">made with <i class="fas fa-heart"></i> by Jahel</h1>
+					-->
+					<h5 class="text-center">made by Bruno and Guilherme</h1>
+				</footer>
+			</div>
+		</div> <!-- fim container -->
+		<script src="public/js/jquery-3.3.1.min.js"></script>
+		<script src="public/js/jquery-ui.min.js"></script>
+		<script src="public/js/bootstrap.min.js"></script>
+	</body>
+</html>
