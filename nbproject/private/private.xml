@@ -4,6 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/teixeira/eclipse-workspace/ProcessoSeletivoEquals/public/js/myjs.js</file>
+            <file>file:/home/teixeira/eclipse-workspace/ProcessoSeletivoEquals/app/controllers/Application.java</file>
+            <file>file:/home/teixeira/eclipse-workspace/ProcessoSeletivoEquals/app/persistence/ExtratoDAO.java</file>
+            <file>file:/home/teixeira/eclipse-workspace/ProcessoSeletivoEquals/app/persistence/TransacaoDAO.java</file>
+            <file>file:/home/teixeira/eclipse-workspace/ProcessoSeletivoEquals/app/controllers/Controll.java</file>
             <file>file:/home/teixeira/eclipse-workspace/ProcessoSeletivoEquals/public/index.html</file>
         </group>
     </open-files>
