@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import play.*;
 import play.mvc.*;
 
 import java.util.*;
+import java.util.logging.Level;
 
 import models.*;
 import persistence.ConexaoMySQL;
@@ -34,11 +36,24 @@ public class Application extends Controller {
                             Application.extrato = new Extrato(line);
                             ExtratoDAO extratoDAO = new ExtratoDAO(ConexaoMySQL.getConexaoMySQL());
                             extratoDAO.save(extrato);
+                        {
+                            try {
+                                extratoDAO.getConnection().close();
+                            } catch (SQLException ex) {
+                                System.out.println("Erro ao fechar conexão");
+                            }
+                        }
                         break;
+
                         case '1':
                             Transacao transacao = new Transacao(line);
                             TransacaoDAO transacaoDAO = new TransacaoDAO(ConexaoMySQL.getConexaoMySQL());
                             transacaoDAO.save(transacao, extrato.getNumArquivo());
+                            try {
+                                transacaoDAO.getConnection().close();
+                            } catch (SQLException ex) {
+                                System.out.println("Erro ao fechar conexão");
+                            }
                         break;
                     }
 
@@ -67,6 +82,11 @@ public class Application extends Controller {
         
         ExtratoDAO extratoDAO = new ExtratoDAO(ConexaoMySQL.getConexaoMySQL());
         Application.extrato = extratoDAO.queryById(numArquivo);
+        try {
+            extratoDAO.getConnection().close();
+        } catch (SQLException ex) {
+            System.out.println("Erro ao fechar conexão");
+        }
         
         renderTemplate("public/index.html");
     }

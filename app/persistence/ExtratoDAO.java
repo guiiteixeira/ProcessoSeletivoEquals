@@ -99,5 +99,9 @@ public class ExtratoDAO {
 
         }
     }
+    
+    public Connection getConnection(){
+        return this.conn;
+    }
 
 }

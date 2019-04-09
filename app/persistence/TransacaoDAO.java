@@ -181,5 +181,9 @@ public class TransacaoDAO {
         }
 
     }
+    
+    public Connection getConnection(){
+        return this.conn;
+    }
 
 }

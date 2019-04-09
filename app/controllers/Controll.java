@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package controllers;
+import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import models.Extrato;
@@ -43,6 +44,12 @@ public class Controll extends Controller{
 "            <h5>Versão layout: " + new String(extrato.getVersaoLayout()) + "</h5>\n" +
 "            <h5>Versão release: " + new String(extrato.getVersaoRelease()) + "</h5>\n" +
 "          </div>";
+        
+        try {
+            extratoDAO.getConnection().close();
+        } catch (SQLException ex) {
+            System.out.println("Erro ao fechar conexão");
+        }
         
         renderText(html);
         
@@ -108,6 +115,12 @@ public class Controll extends Controller{
             listTransacoes = transacaoDAO.queryByFileNumberLimited(Application.extrato.getNumArquivo(),offset,limit);
         }
 
+        try {
+            transacaoDAO.getConnection().close();
+        } catch (SQLException ex) {
+            System.out.println("Erro ao fechar conexão");
+        }    
+        
         renderText(html);
     
     }
