@@ -39,8 +39,8 @@ public class ConexaoMySQL {
             String serverName = "localhost";    //caminho do servidor do BD
             String mydatabase = "Equals";        //nome do banco de dados
             String url = "jdbc:mysql://" + serverName + ":3306/" + mydatabase + "?useTimezone=true&serverTimezone=UTC";
-            String username = "guilherme";        //nome de um usuário do BD
-            String password = "mysql";      //senha de acesso
+            String username = "default";        //nome de um usuário do BD
+            String password = "";      //senha de acesso
             connection = DriverManager.getConnection(url, username, password);
 
            //Testa a conexão//
