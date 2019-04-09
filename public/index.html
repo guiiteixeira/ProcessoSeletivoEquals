@@ -1,66 +1,163 @@
 <!DOCTYPE html>
-<html lang="pt-br" ng-app="GerenciadorUsuarios">
-	<head>
-		<meta charset="UTF-8">
-		<title>Projeto Engenharia de Software</title>
-		<link rel="stylesheet" href="public/css/boots/bootstrap.min.css">
-		<link rel="stylesheet" href="public/css/boots/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="public/css/boots/bootstrap-select.min.css">
-		<link rel="stylesheet" href="public/css/main.css">
-		<link rel="stylesheet" href="public/css/jquery-ui.min.css">
-		<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-		<script src="public/js/angular/angular.min.js"></script>
-		<script src="public/js/angular/angular-route.min.js"></script>
-		<script src="public/js/main.js"></script>
-		<script src="public/js/controllers/usuario-controller.js"></script>
-		<script src="public/js/controllers/listaUsuarios-controller.js"></script>
-		<script src="public/js/controllers/cargo-controller.js"></script>
-		<script src="public/js/controllers/listaCargos-controller.js"></script>
-		<script src="public/js/services/cargoService.js"></script>
-		<script src="public/js/services/usuarioService.js"></script>
-	</head>
-	<body>
-		<div class="container">
-			<header>
-				<nav>
-					<ul class="nav nav-pills">
-						<li role="presentation"><a href="#/">Home</a></li>
-						<li class="dropdown" role="presentation">
-							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-								Usuários <span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu">
-								<li role="presentation"><a href="#/usuario/new">Adicionar Usuário</a></li>
-								<li role="presentation"><a href="#/usuarios">Listar Usuários</a></li>
-							</ul>
-						</li>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8">
+    <title>Relatório de Extrato</title>
+    <link rel="stylesheet" href="@{'/public/css/bootstrap.min.css'}">
+    <link rel="stylesheet" href="@{'/public/css/main.css'}">
+    <script src="@{'/public/js/bootstrap.min.js'}"></script>
 
-						<li class="dropdown" role="presentation">
-							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-								Cargos <span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu">
-								<li role="presentation"><a href="#/cargo/new">Adicionar Cargo</a></li>
-								<li role="presentation"><a href="#/cargos">Listar Cargos</a></li>
-							</ul>
-						</li>
-					</ul>
-				</nav>
-			</header>
+    <script src="@{'/public/js/myjs.js'}"></script>
+  </head>
+  <body id="body" onload="getExtrato();getTransacoes();">
+      <p style="display: none;" id="valueArq"></p>
+    <div class="container-fluid">
+      <div class="row div-title">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+          <div class="text-barra">
+            <span>
+              <img src="@{'/public/img/barra_vertical_48px.png'}">
+            </span>
+            <span>
+              <h1><Strong>Relatório de Extrato</Strong><br></h1>
+            </span>
+         </div>
+        </div>
+      </div>
+      <br>
+      <div class="row first-content" id="extrato-div">
+          
+      </div>
+    </div> 
 
-			<ng-view></ng-view>
+    <div class="row">
+      
+      <div class="input-group filter-cod">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Filtrar por Código da Transação</span>
+        </div>
+        <input class="form-control" type="text" name="codigoTransacao" onkeyup="filterCodigo(this,'table','0')">
+      </div>
 
-			<div class="row">
-				<footer>
-					<!--
-					<h5 class="text-center">made with <i class="fas fa-heart"></i> by Jahel</h1>
-					-->
-					<h5 class="text-center">made by Bruno and Guilherme</h1>
-				</footer>
-			</div>
-		</div> <!-- fim container -->
-		<script src="public/js/jquery-3.3.1.min.js"></script>
-		<script src="public/js/jquery-ui.min.js"></script>
-		<script src="public/js/bootstrap.min.js"></script>
-	</body>
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-4">
+        <div class="input-group filter-data-first">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Data Inicial</span>
+          </div>
+          <input id="inicio" class="form-control" type="date" name="dataI" >
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="input-group filter-data">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Data Final</span>
+          </div>
+          <input id="fim" class="form-control" type="date" name="dataF" >
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <button type="button" class="btn btn-secondary filter-data" onclick="filterData('inicio','fim','table','2')">Filtrar Por Data</button>
+      </div>
+    
+    </div>
+
+
+    <div class="row table-div">
+
+      <table class="table" id="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Código da Transação</th>
+            <th scope="col">Código do Cliente</th>
+            <th scope="col">Data Inicial</th>
+            <th scope="col">Data Confirmação</th>
+            <th scope="col">Tipo de Evento</th>
+            <th scope="col">Tipo de Transação</th>
+            <th scope="col">Número de Série do Leitor</th>
+            <th scope="col">Leitor</th>
+            <th scope="col">Código do Pedido</th>
+            <th scope="col">Valor Total da Transação</th>
+            <th scope="col">Valor da Parcela</th>
+            <th scope="col">Pagamento</th>
+            <th scope="col">Plano</th>
+            <th scope="col">Parcela Liberada</th>
+            <th scope="col">Número de Parcelas</th>
+            <th scope="col">Data Prevista de Pagamento</th>
+            <th scope="col">Taxa de Parcelamento do Comprador</th>
+            <th scope="col">Tarifa de Boleto do Comprador</th>
+            <th scope="col">Taxa de Parcelamento do Vendedor</th>
+            <th scope="col">Tarifa de Boleto do Vendedor</th>
+            <th scope="col">Taxa de Intermediação</th>
+            <th scope="col">Tarifa de Intermediação</th>
+            <th scope="col">Valor Original</th>
+            <th scope="col">Valor Líquido</th>
+            <th scope="col">Repasse da Aplicação</th>
+            <th scope="col">Status do Pagamento</th>
+            <th scope="col">Meio de Pagamento</th>
+            <th scope="col">Instituição Financeira</th>
+            <th scope="col">Canal de Entrada</th>
+            <th scope="col">Meio de Captura</th>
+            <th scope="col">Número Lógico</th>
+            <th scope="col">NSU</th>
+            <th scope="col">Cartão Bin</th>
+            <th scope="col">Cartão Holder</th>
+            <th scope="col">Código de Autorização</th>
+            <th scope="col">Código do CV</th>
+
+          </tr>
+        </thead>
+        <tbody id="transacao-tbody">
+          <tr>
+            <td scope="col">12345678910111213141516171819202</td>
+            <td scope="col">1234567891</td>
+            <td scope="col">25/09/2018</td>
+            <td scope="col">25/09/2018 - 13:17:36</td>
+            <td scope="col">1</td>
+            <td scope="col">1</td>
+            <td scope="col">68318154</td>
+            <td scope="col">12</td>
+            <td scope="col">000001</td>
+            <td scope="col">1.0</td>
+            <td scope="col">0.98</td>
+            <td scope="col">M</td>
+            <td scope="col">1</td>
+            <td scope="col">1</td>
+            <td scope="col">1</td>
+            <td scope="col">25/10/2018</td>
+            <td scope="col">0.0</td>
+            <td scope="col">0.0</td>
+            <td scope="col">0.0</td>
+            <td scope="col">0.0</td>
+            <td scope="col">0.02</td>
+            <td scope="col">0.0</td>
+            <td scope="col">1.0</td>
+            <td scope="col">0.98</td>
+            <td scope="col">0.0</td>
+            <td scope="col">1</td>
+            <td scope="col">3</td>
+            <td scope="col">MASTERCARD</td>
+            <td scope="col">ME</td>
+            <td scope="col">1</td>
+            <td scope="col"></td>
+            <td scope="col">1003413168</td>
+            <td scope="col">123456</td>
+            <td scope="col">7890</td>
+            <td scope="col">589082</td>
+            <td scope="col">115720</td>
+
+          </tr>
+        </tbody>
+        
+      </table>
+    </div>
+
+  </body>
+
 </html>
