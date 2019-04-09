@@ -20,6 +20,7 @@ h1 {
 
 .first-content {
 	margin-top: 2%;
+	margin-bottom: 4%;
 	border-style: solid;
 	border-radius: 20px;
 	border-color: rgb(28, 59, 101);
@@ -32,11 +33,17 @@ h1 {
 .table-div {
 	margin-left: 5px;
 	margin-right: 5px;
-	margin-top: 1%;
+	margin-top: 3%;
 	overflow-x: scroll;
 }
 
-.thead-dark, tbody {
+ tbody {
+	white-space: nowrap;
+}
+
+.table-head {
+	background-color: rgb(28, 59, 101);
+	color: white;
 	white-space: nowrap;
 }
 
@@ -54,6 +61,12 @@ h1 {
 
 .filter-data {
 	margin-top: 2%;
+
+}
+
+.filter-data-button {
+	background-color: rgb(28, 59, 101);
+
 }
 
 
