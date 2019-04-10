@@ -98,9 +98,9 @@ public class ConexaoMySQL {
             // Configurando a conexão com um banco de dados//
                 
             String mydatabase = "Equals";        //nome do banco de dados
+
             String url = "jdbc:mysql://" + serverName + ":" + port + "/" + mydatabase + "?useTimezone=true&serverTimezone=UTC";
-                    
-                  
+                
             connection = DriverManager.getConnection(url, username, password);
 
            //Testa a conexão//
