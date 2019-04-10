@@ -21,16 +21,18 @@ import play.mvc.*;
  */
 public class Controll extends Controller{
     
+    //formatadores de data 
     private final static String DATE = "dd/MM/uuuu";
     private final static String DATE_TIME = "dd/MM/uuuu - HH:mm:ss";
     
+    /**
+     * Este metodo gera um html com as informacoes do extrato
+     */
     public static void buscaExtrato(){
-        Connection conn = ConexaoMySQL.getConexaoMySQL();
+                
+        Extrato extrato = Application.extrato;
         
-        ExtratoDAO extratoDAO = new ExtratoDAO(conn);
-        
-        Extrato extrato = extratoDAO.queryById(Application.extrato.getNumArquivo());
-        
+        //gera html com dados do extrato
         String html = "<div class=\"col-md-1\"></div>\n" +
 "          <div class=\"col-md-6\">\n" +
 "            <br>\n" +
@@ -47,30 +49,30 @@ public class Controll extends Controller{
 "            <h5>Versão release: " + new String(extrato.getVersaoRelease()) + "</h5>\n" +
 "          </div>";
         
-        try {
-            extratoDAO.getConnection().close();
-        } catch (SQLException ex) {
-            System.out.println("Erro ao fechar conexão");
-        }
-        ConexaoMySQL.closeConnection();
-        
+        // responde a requisicao com o html gerado
         renderText(html);
         
     }
     
+    /**
+     * Este metodo busca transacoes no banco de dados e gera um html com as informacoes de cada transacao buscada
+     */
     public static void buscaTransacoes(){
     
+        //Abre conexao com o banco de dados
         Connection conn = ConexaoMySQL.getConexaoMySQL();
         TransacaoDAO transacaoDAO = new TransacaoDAO(conn);
         ArrayList<Transacao> listTransacoes;
         String html = "";
         
+        //seta parametros de leitura
         int limit = 100;
         int offset = 0;
         listTransacoes = transacaoDAO.queryByFileNumberLimited(Application.extrato.getNumArquivo(),offset,limit);
 
         while(listTransacoes.size() > 0){
 
+            //para cada transacao gera uma linha de tabela html com os dados
             for(Transacao transacao : listTransacoes){
 
                 html += "          <tr>\n" +
@@ -128,13 +130,9 @@ public class Controll extends Controller{
             listTransacoes = transacaoDAO.queryByFileNumberLimited(Application.extrato.getNumArquivo(),offset,limit);
         }
 
-        try {
-            transacaoDAO.getConnection().close();
-        } catch (SQLException ex) {
-            System.out.println("Erro ao fechar conexão");
-        }    
-        
+        //fecha conexao com o banco de dados
         ConexaoMySQL.closeConnection();
+        //responde requisicao com o html gerado
         renderText(html);
     
     }
