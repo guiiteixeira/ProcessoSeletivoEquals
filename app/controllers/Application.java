@@ -39,42 +39,43 @@ public class Application extends Controller {
                 //Abre o leitor de arquivo de texto
                 reader = new BufferedReader(new FileReader(nomeArquivo));
 
-                try{
-                    while(reader.ready()){
-                        //lê uma linha
-                        String line = reader.readLine();
-                        
-                        switch (line.charAt(0)){
-                            case '0':
-                                Application.extrato = new Extrato(line);
-                                ExtratoDAO extratoDAO = new ExtratoDAO(conn);
-                                extratoDAO.save(extrato);
-                            break;
-                            case '1':
-                                Transacao transacao = new Transacao(line);
-                                TransacaoDAO transacaoDAO = new TransacaoDAO(conn);
-                                transacaoDAO.save(transacao, extrato.getNumArquivo());
-                            break;
-                        }
+                
+                while(reader.ready()){
+                    //lê uma linha
+                    String line = reader.readLine();
 
-                    }
-                    
-                    if(extrato != null){
-                        //mostra html
-                        renderTemplate("public/index.html");
-                    }
-                    else{
-                        renderText("Houve algum problema ao ler extrato do arquivo: " + nomeArquivo + "\n");
+                    switch (line.charAt(0)){
+                        case '0':
+                            Application.extrato = new Extrato(line);
+                            ExtratoDAO extratoDAO = new ExtratoDAO(conn);
+                            extratoDAO.save(extrato);
+                        break;
+                        case '1':
+                            Transacao transacao = new Transacao(line);
+                            TransacaoDAO transacaoDAO = new TransacaoDAO(conn);
+                            transacaoDAO.save(transacao, extrato.getNumArquivo());
+                        break;
                     }
 
-                }catch(IOException ex){
-                    //mostra msg de erro
-                    renderText("Erro encontrado ao ler arquivo: " + nomeArquivo );
                 }
+
+                if(extrato != null){
+                    //mostra html
+                    renderTemplate("public/index.html");
+                }
+                else{
+                    renderText("Houve algum problema ao ler extrato do arquivo: " + nomeArquivo + 
+                                "\nCaso você queira apenas acessar um extrato no banco de dados, "
+                                + "acesse 'localhost:9000/NUMERO_EXTRATO'");
+                }
+
+
 
             }catch(IOException ex){
                 //mostra msg de erro
-                renderText("Erro encontrado ao ler arquivo: " + nomeArquivo );
+                renderText("Erro encontrado ao ler arquivo: " + nomeArquivo +
+                            "\nCaso você queira apenas acessar um extrato no banco de dados, "
+                                + "acesse 'localhost:9000/NUMERO_EXTRATO'");
             }
             finally{
                 try{
@@ -116,11 +117,12 @@ public class Application extends Controller {
                 renderTemplate("public/index.html");
             }
             else{
-                renderText("Houve algum problema ao acessar o extrato de numero: " + numArquivo + "\n");
+                renderText("Houve algum problema ao acessar o extrato de numero: " + numArquivo + 
+                            "\nCaso você queira ler um arquivo, acesse 'localhost:9000/leitura/NOME_DO_ARQUIVO'");
             }
         }else{
             //mostra msg de erro
-            renderText("Impossivel conectar ao banco de dados");
+            renderText("Impossivel conectar ao banco de dados, verifique os dados no arquivo db.stt!!!");
         }
         //fecha conexao com o banco de dados
             ConexaoMySQL.closeConnection();

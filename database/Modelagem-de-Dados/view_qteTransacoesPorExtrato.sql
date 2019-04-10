@@ -2,8 +2,8 @@ CREATE VIEW `qteTransacoesPorExtrato` AS SELECT
     E.numArquivo,
     COUNT(*) transacoes
 FROM 
-    EXTRATO E,
-    TRANSACAO T
+    Extrato E,
+    Transacao T
 WHERE 
     E.numArquivo = T.Extrato_numArquivo    
 GROUP BY 

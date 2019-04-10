@@ -36,7 +36,7 @@ public class Controll extends Controller{
         String html = "<div class=\"col-md-1\"></div>\n" +
 "          <div class=\"col-md-6\">\n" +
 "            <br>\n" +
-"            <h5><strong>Número do arquivo: " + extrato.getNumArquivo() + "</strong></h5>\n" +
+"            <h5><strong>Número do extrato: " + extrato.getNumArquivo() + "</strong></h5>\n" +
 "            <h5>Número do estabelecimento: " + new String(extrato.getNumeroEstabelecimento()) + "</h5>\n" +
 "            <h5>Data de Processamento: " + extrato.getDataProcessamento().format(DateTimeFormatter.ofPattern(DATE)) + "</h5>\n" +
 "            <h5>Período do extrato: " + extrato.getPeriodo()[0].format(DateTimeFormatter.ofPattern(DATE)) + " até " + extrato.getPeriodo()[1].format(DateTimeFormatter.ofPattern(DATE)) + "</h5>\n" +
