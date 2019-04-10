@@ -36,8 +36,13 @@ public class TransacaoDAO {
     public boolean save(Transacao transacao,String numArquivo){
         //constroi um statement contendo o insert dos dados de transacao
         String sql = "INSERT INTO Transacao VALUES('" + transacao.getCodigoTransacao() + "','" + transacao.getDataInicial().format(DATE) +
-                    "','" + transacao.getDataConfirmacao().format(DATE_TIME) + "','" + new String(transacao.getNumSerieLeitor()) + "','" +
-                    new String(transacao.getCodigoCliente()) + "'," + Integer.toString(transacao.getTipoEvento()) + ",'" + new String(transacao.getCodigoPedido()) +
+                    "','" + transacao.getDataConfirmacao().format(DATE_TIME) + "','";
+        if(transacao.getNumSerieLeitor() != null){
+            sql += new String(transacao.getNumSerieLeitor());
+        }else{
+            sql += "null";
+        }
+            sql += "','" + new String(transacao.getCodigoCliente()) + "'," + Integer.toString(transacao.getTipoEvento()) + ",'" + new String(transacao.getCodigoPedido()) +
                     "'," + Float.toString(transacao.getValorTotal()) + "," + Float.toString(transacao.getValorParcela()) + ",'" + transacao.getPagamento() + "','" +
                     new String(transacao.getPlano()) + "','" + new String(transacao.getParcelaLiberada()) + "'," + Integer.toString(transacao.getQteParcelas()) + ",'" +
                     transacao.getDataPrevisaoPagamento().format(DATE) + "'," + Float.toString(transacao.getTaxaParcelamentoComprador()) + "," +
@@ -103,10 +108,10 @@ public class TransacaoDAO {
 
                 //confere se existe um leitor
                 int leitor = -1;
-                String numSerieLeitor = null;
+                char[] numSerieLeitor = null;
                 if(results.getObject("leitor") != null){
                     leitor = results.getInt("leitor");
-                    numSerieLeitor = results.getString("numSerieLeitor");
+                    numSerieLeitor = results.getString("numSerieLeitor").toCharArray();
                 }
 
                 String date = results.getString("dataInicial");
@@ -135,7 +140,7 @@ public class TransacaoDAO {
                                                     results.getInt("meioCaptura"),results.getString("numLogico").toCharArray(),
                                                     results.getString("NSU").toCharArray(),results.getString("cartaoBin").toCharArray(),
                                                     results.getString("cartaoHolder").toCharArray(),results.getString("codAutorizacao").toCharArray(),
-                                                    results.getString("codCV").toCharArray(),leitor,numSerieLeitor.toCharArray());
+                                                    results.getString("codCV").toCharArray(),leitor,numSerieLeitor);
                 //adiciona a transacao na lista
                 listTransacoes.add(transacao);
             }

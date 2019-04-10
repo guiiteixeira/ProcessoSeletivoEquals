@@ -1,5 +1,0 @@
-# You can specialize this file for each language.
-# For example, for French create a messages.fr file
-#
-
-mensagem.erroCpfExistente=Já existe um usuário com esse cpf cadastrado

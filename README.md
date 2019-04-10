@@ -6,7 +6,32 @@ Para instalação da Framework basta seguir os passos:
 
 	1- Acesse https://www.playframework.com/
 	2- Clique em 'browse all versions' e selecione a versão 1.4.5 para fazer o download
-	3- Após fazer o download é necessario configurar seu PATH para poder executar play na linha de comando
+	3- Após fazer o download é necessario extrair os arquivos em uma pasta de sua escolha e configurar seu PATH para poder executar o play
+	   na linha de comando
+
+Configuração do Banco de Dados:
+
+	1- O padrão do acesso ao banco de dados é:
+		
+		Usuário - "root"
+		Senha - ""
+		IP - "localhost"
+		Porta - "3306"
+		
+		- Caso seja necessária a substituição desses dados, siga os passos:
+			
+			1.1- Na pasta 'conf' abra o arquivo 'db.stt'
+			1.2- Preencha os dados da seguinte forma:
+				
+				mysql-user@NOVO_USUARIO
+				mysql-pass@NOVA_SENHA
+				mysql-addr@NOVO_IP
+				mysql-port@NOVA_PORTA
+
+				Obs: É importante que os dados sejam preenchidos exatamente como no exemplo acima!
+		
+	2- O script de criação do banco de dados encontra-se na pasta 'database'
+
 
 Execução do projeto:
 

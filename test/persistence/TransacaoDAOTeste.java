@@ -1,5 +1,6 @@
 package persistence;
 
+import java.sql.Connection;
 import models.Extrato;
 import models.Transacao;
 import org.junit.Test;
@@ -16,9 +17,10 @@ public class TransacaoDAOTeste {
     @Test
     public void cadastraTransacao(){
 
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
         Extrato extrato = new Extrato(extratoTxt);
         Transacao transacao = new Transacao(transacaoTxt);
-        TransacaoDAO transacaoDAO = new TransacaoDAO(ConexaoMySQL.getConexaoMySQL());
+        TransacaoDAO transacaoDAO = new TransacaoDAO(conn);
 
         System.out.println(transacaoDAO.save(transacao,extrato.getNumArquivo()));
         ConexaoMySQL.closeConnection();
@@ -27,8 +29,9 @@ public class TransacaoDAOTeste {
     @Test
     public void lerTransacoes(){
 
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
         Extrato extrato = new Extrato(extratoTxt);
-        TransacaoDAO transacaoDAO = new TransacaoDAO(ConexaoMySQL.getConexaoMySQL());
+        TransacaoDAO transacaoDAO = new TransacaoDAO(conn);
 
         ArrayList<Transacao> listTransacoes = transacaoDAO.queryByFileNumberLimited(extrato.getNumArquivo(),0,3);
 
@@ -41,11 +44,13 @@ public class TransacaoDAOTeste {
 
     @Test
     public void contarTransacoes(){
-
+        
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
         Extrato extrato = new Extrato(extratoTxt);
-        TransacaoDAO transacaoDAO = new TransacaoDAO(ConexaoMySQL.getConexaoMySQL());
+        TransacaoDAO transacaoDAO = new TransacaoDAO(conn);
 
         System.out.println(Integer.toString(transacaoDAO.countInstancesByFile(extrato.getNumArquivo())));
+        ConexaoMySQL.closeConnection();
     }
 
 }

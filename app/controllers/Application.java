@@ -22,73 +22,74 @@ public class Application extends Controller {
     
     public static void leitura(String nomeArquivo) {
         
-        BufferedReader reader = null;
-        try {
-             reader = new BufferedReader(new FileReader(nomeArquivo));
+        ConexaoMySQL.configureConexaoMySQL();
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
+        
+        if(conn != null){
+            BufferedReader reader = null;
+            try {
+                 reader = new BufferedReader(new FileReader(nomeArquivo));
 
-            try{
-                while(reader.ready()){
+                try{
+                    while(reader.ready()){
 
-                    String line = reader.readLine();
+                        String line = reader.readLine();
 
-                    switch (line.charAt(0)){
-                        case '0':
-                            Application.extrato = new Extrato(line);
-                            ExtratoDAO extratoDAO = new ExtratoDAO(ConexaoMySQL.getConexaoMySQL());
-                            extratoDAO.save(extrato);
-                        {
-                            try {
-                                extratoDAO.getConnection().close();
-                            } catch (SQLException ex) {
-                                System.out.println("Erro ao fechar conexão");
-                            }
+                        switch (line.charAt(0)){
+                            case '0':
+                                Application.extrato = new Extrato(line);
+                                ExtratoDAO extratoDAO = new ExtratoDAO(conn);
+                                extratoDAO.save(extrato);
+                            break;
+                            case '1':
+                                Transacao transacao = new Transacao(line);
+                                TransacaoDAO transacaoDAO = new TransacaoDAO(conn);
+                                transacaoDAO.save(transacao, extrato.getNumArquivo());
+                            break;
                         }
-                        break;
 
-                        case '1':
-                            Transacao transacao = new Transacao(line);
-                            TransacaoDAO transacaoDAO = new TransacaoDAO(ConexaoMySQL.getConexaoMySQL());
-                            transacaoDAO.save(transacao, extrato.getNumArquivo());
-                            try {
-                                transacaoDAO.getConnection().close();
-                            } catch (SQLException ex) {
-                                System.out.println("Erro ao fechar conexão");
-                            }
-                        break;
                     }
 
+                }catch(IOException ex){
+                    renderText("Erro encontrado ao ler arquivo: " + nomeArquivo );
                 }
-                
+
             }catch(IOException ex){
                 renderText("Erro encontrado ao ler arquivo: " + nomeArquivo );
             }
-
-        }catch(IOException ex){
-            renderText("Erro encontrado ao ler arquivo: " + nomeArquivo );
-        }
-        finally{
-            try{
-                reader.close();
-            }catch(IOException ex){
-                System.out.println("Erro ao fechar arquivo");
+            finally{
+                try{
+                    reader.close();
+                }catch(IOException ex){
+                    System.out.println("Erro ao fechar arquivo");
+                }
             }
+            ConexaoMySQL.closeConnection();
+            renderTemplate("public/index.html");
+            
+        }else{
+            renderText("Impossivel conectar ao banco de dados, verifique os dados no arquivo db.stt!!!");
         }
-        
-        renderTemplate("public/index.html");
-        
     }
     
     public static void index(String numArquivo){
         
-        ExtratoDAO extratoDAO = new ExtratoDAO(ConexaoMySQL.getConexaoMySQL());
-        Application.extrato = extratoDAO.queryById(numArquivo);
-        try {
-            extratoDAO.getConnection().close();
-        } catch (SQLException ex) {
-            System.out.println("Erro ao fechar conexão");
-        }
+        ConexaoMySQL.configureConexaoMySQL();
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
         
-        renderTemplate("public/index.html");
+        if(conn != null){
+            ExtratoDAO extratoDAO = new ExtratoDAO(conn);
+            Application.extrato = extratoDAO.queryById(numArquivo);
+            try {
+                extratoDAO.getConnection().close();
+            } catch (SQLException ex) {
+                System.out.println("Erro ao fechar conexão");
+            }
+            ConexaoMySQL.closeConnection();
+            renderTemplate("public/index.html");
+        }else{
+            renderText("Impossivel conectar ao banco de dados");
+        }
     }
 
 }

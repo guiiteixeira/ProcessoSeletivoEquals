@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package controllers;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,8 +25,9 @@ public class Controll extends Controller{
     private final static String DATE_TIME = "dd/MM/uuuu - HH:mm:ss";
     
     public static void buscaExtrato(){
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
         
-        ExtratoDAO extratoDAO = new ExtratoDAO(ConexaoMySQL.getConexaoMySQL());
+        ExtratoDAO extratoDAO = new ExtratoDAO(conn);
         
         Extrato extrato = extratoDAO.queryById(Application.extrato.getNumArquivo());
         
@@ -50,6 +52,7 @@ public class Controll extends Controller{
         } catch (SQLException ex) {
             System.out.println("Erro ao fechar conexão");
         }
+        ConexaoMySQL.closeConnection();
         
         renderText(html);
         
@@ -57,7 +60,8 @@ public class Controll extends Controller{
     
     public static void buscaTransacoes(){
     
-        TransacaoDAO transacaoDAO = new TransacaoDAO(ConexaoMySQL.getConexaoMySQL());
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
+        TransacaoDAO transacaoDAO = new TransacaoDAO(conn);
         ArrayList<Transacao> listTransacoes;
         String html = "";
         
@@ -76,8 +80,17 @@ public class Controll extends Controller{
                         "            <td scope=\"col\">" + transacao.getDataConfirmacao().format(DateTimeFormatter.ofPattern(DATE_TIME)) + "</td>\n" +
                         "            <td scope=\"col\">" + Integer.toString(transacao.getTipoEvento()) + "</td>\n" +
                         "            <td scope=\"col\">" + Integer.toString(transacao.getTipoTransacao()) + "</td>\n" +
-                        "            <td scope=\"col\">" + new String(transacao.getNumSerieLeitor()) + "</td>\n" +
-                        "            <td scope=\"col\">" + Integer.toString(transacao.getLeitor()) + "</td>\n" +
+                        "            <td scope=\"col\">";
+                
+                if(transacao.getNumSerieLeitor() != null){
+                    html += new String(transacao.getNumSerieLeitor());
+                }
+                html += "</td>\n" +
+                        "            <td scope=\"col\">";
+                if(transacao.getLeitor() > -1){
+                    html += Integer.toString(transacao.getLeitor());
+                }
+                html += "</td>\n" +
                         "            <td scope=\"col\">" + new String(transacao.getCodigoPedido()) + "</td>\n" +
                         "            <td scope=\"col\">" + Float.toString(transacao.getValorTotal()) + "</td>\n" +
                         "            <td scope=\"col\">" + Float.toString(transacao.getValorParcela()) + "</td>\n" +
@@ -121,12 +134,10 @@ public class Controll extends Controller{
             System.out.println("Erro ao fechar conexão");
         }    
         
+        ConexaoMySQL.closeConnection();
         renderText(html);
     
     }
     
-    public static void buscaNumArquivo(){
-        renderText(Application.extrato.getNumArquivo());
-    }
     
 }

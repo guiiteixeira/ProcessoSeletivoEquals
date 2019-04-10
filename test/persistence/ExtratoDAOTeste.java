@@ -1,5 +1,6 @@
 package persistence;
 
+import java.sql.Connection;
 import models.Extrato;
 import org.junit.Test;
 
@@ -15,20 +16,24 @@ public class ExtratoDAOTeste {
     @Test
     public void cadastraExtrato(){
 
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
         Extrato extrato = new Extrato(extratoTxt);
-        ExtratoDAO extratoDAO = new ExtratoDAO(ConexaoMySQL.getConexaoMySQL());
+        ExtratoDAO extratoDAO = new ExtratoDAO(conn);
 
         System.out.println(extratoDAO.save(extrato));
+        ConexaoMySQL.closeConnection();
 
     }
 
     @Test
     public void buscarExtrato(){
 
-        ExtratoDAO extratoDAO = new ExtratoDAO(ConexaoMySQL.getConexaoMySQL());
+        Connection conn = ConexaoMySQL.getConexaoMySQL();
+        ExtratoDAO extratoDAO = new ExtratoDAO(conn);
         Extrato extrato = extratoDAO.queryById(idExtrato);
 
         System.out.println(extrato.getDataProcessamento().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
+        ConexaoMySQL.closeConnection();
 
     }
 }
